@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "Cite this software version, Dang (2026), and the R packages used. / 请引用准确软件版本、Dang（2026）及相关 R 包。"
+title: "Hierarchical MASEM: a reproducible Codex skill for psychology and social science"
+type: software
+authors:
+  - name: "Jiaqi-Guo-0114"
+version: 0.1.0
+date-released: 2026-10-01
+license: MIT
+url: "https://github.com/Jiaqi-Guo-0114/hierarchical-masem"
+repository-code: "https://github.com/Jiaqi-Guo-0114/hierarchical-masem"
+keywords:
+  - meta-analytic structural equation modeling
+  - MASEM
+  - psychology
+  - hierarchical meta-analysis
+references:
+  - type: article
+    authors:
+      - family-names: Dang
+        given-names: J.
+    title: "A practical tutorial in R for meta-analytic structural equation modeling with hierarchical effect-size dependency and study-level moderators"
+    year: 2026
+    doi: "10.1177/25152459261466637"

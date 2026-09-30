@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "data_file": "correlations.csv",
+  "model_file": "model.json",
+  "variables": [
+    "X1",
+    "X2",
+    "Y"
+  ],
+  "sample_independence": "requires_study_coding_confirmation",
+  "correlation_type": "pearson",
+  "columns": {
+    "study_id": "study_id",
+    "sample_id": "sample_id",
+    "var1": "var1",
+    "var2": "var2",
+    "r": "r",
+    "n": "n",
+    "overlap_group": "overlap_group"
+  },
+  "moderation": {
+    "mode": "none",
+    "path_tests": [],
+    "pairwise_paths": []
+  },
+  "sensitivity": {
+    "settings": [
+      [
+        0,
+        0
+      ],
+      [
+        0.5,
+        0.5
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "leave_one_study_out": true
+  },
+  "seed": 20260930
+}

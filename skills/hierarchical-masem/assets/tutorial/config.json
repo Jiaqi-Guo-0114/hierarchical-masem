@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "data_file": "correlations.xlsx",
+  "model_file": "model.json",
+  "variables": [
+    "A",
+    "C",
+    "E",
+    "N",
+    "O",
+    "FL"
+  ],
+  "sample_independence": "confirmed_independent",
+  "correlation_type": "pearson",
+  "columns": {
+    "study_id": "Study.id",
+    "sample_id": "Sample.id",
+    "var1": "Var1",
+    "var2": "Var2",
+    "r": "r",
+    "n": "N",
+    "effect_id": "ES.id"
+  },
+  "moderator": {
+    "column": "Flow.Questionnaire",
+    "type": "categorical"
+  },
+  "moderation": {
+    "mode": "exploratory",
+    "path_tests": [
+      "b_a",
+      "b_c",
+      "b_e",
+      "b_n",
+      "b_o"
+    ],
+    "pairwise_paths": [
+      "b_c"
+    ]
+  },
+  "sensitivity": {
+    "settings": [
+      [
+        0,
+        0
+      ],
+      [
+        0.5,
+        0.5
+      ],
+      [
+        1,
+        1
+      ]
+    ],
+    "leave_one_study_out": true
+  },
+  "seed": 20260930
+}

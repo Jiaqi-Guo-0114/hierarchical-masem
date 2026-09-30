@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.DS_Store
+.Rhistory
+.RData
+.venv/
+runs/
+my-example/
+my-analysis/
+tutorial-check/
+test-output/
+renv/library/
+renv/staging/
+skills/hierarchical-masem/assets/tutorial/Flow_and_BigFive.xlsx
+skills/hierarchical-masem/assets/tutorial/code-original.R

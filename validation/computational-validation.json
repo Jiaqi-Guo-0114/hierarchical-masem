@@ -1,0 +1,160 @@
+{
+  "status": "verified_for_declared_scope",
+  "verified_local_date": "2026-10-01",
+  "tutorial_numerical_test_groups": 23,
+  "tutorial_CLI_test_groups": 4,
+  "public_synthetic_numerical_test_groups": 5,
+  "tutorial_failed_intervals": 0,
+  "recovered_profile_intervals": 7,
+  "independently_checked_profile_endpoints": 14,
+  "reproduction_max_absolute_difference": 0.0,
+  "R": "4.6.0",
+  "locked_packages": 46,
+  "lock_sha256": "3a9a77e07465d7f57b3848d71b8ecfa1edd40f5056994142ab52256a4a9e0324",
+  "source_sha256": {
+    "code-original.R": "d26e7bbe2cf0b07c7d46f0871a846a2aec03a8b81f8a71e10a8ea4f657b30b99",
+    "Flow_and_BigFive.xlsx": "fa51371203afee42dd4a338f7e4f476d6a2465af61832cb7c17d4ef19881a852"
+  },
+  "limitations": [
+    "Computational validation does not establish statistical operating characteristics.",
+    "Inference is conditional on the selected Stage 1 model.",
+    "Incomplete matrices, continuous moderation and overlapping samples are unsupported."
+  ],
+  "independent_oracle": {
+    "status": "pass",
+    "max_estimate_error": 2.7755575615628914e-17,
+    "max_se_error": 2.8008151353731137e-13,
+    "estimate": [
+      0.053217209823703183,
+      0.24471828494960302,
+      0.13389404046573744,
+      -0.12123961925784424,
+      0.06702445425611442
+    ],
+    "se": [
+      0.06331497918358123,
+      0.06341339063717398,
+      0.06448409054838358,
+      0.06443082321381483,
+      0.06102449468335682
+    ],
+    "residual_variance": 0.831469704780545
+  },
+  "public_package_status": "pass",
+  "public_synthetic_CLI_test_groups": 4,
+  "public_package_test_groups": 9,
+  "standalone_plugin_install_status": "pass",
+  "tutorial_interval_count": 38,
+  "tutorial_numerical_tests": {
+    "author_counts_and_same_n_independent_samples": {
+      "status": "pass"
+    },
+    "tutorial_published_AIC_and_paths": {
+      "status": "pass"
+    },
+    "independent_algebra_and_uncertainty_propagation": {
+      "status": "pass"
+    },
+    "row_permutation_invariance": {
+      "status": "pass"
+    },
+    "variable_renaming_invariance": {
+      "status": "pass"
+    },
+    "reversed_pair_orientation_invariance": {
+      "status": "pass"
+    },
+    "missing_pair_rejected": {
+      "status": "pass"
+    },
+    "duplicate_reversed_pair_rejected": {
+      "status": "pass"
+    },
+    "nonpositive_matrix_rejected": {
+      "status": "pass"
+    },
+    "invalid_r_and_n_rejected": {
+      "status": "pass"
+    },
+    "overlap_and_unconfirmed_independence_rejected": {
+      "status": "pass"
+    },
+    "cross_group_study_rejected": {
+      "status": "pass"
+    },
+    "continuous_moderator_rejected": {
+      "status": "pass"
+    },
+    "malformed_start_and_cycle_rejected": {
+      "status": "pass"
+    },
+    "nonconverged_optimizer_rejected": {
+      "status": "pass"
+    },
+    "unsuccessful_profile_limits_not_accepted": {
+      "status": "pass"
+    },
+    "all_tutorial_intervals_and_independent_endpoint_objectives": {
+      "status": "pass"
+    },
+    "fixed_parameter_profile_agrees_with_successful_native_interval": {
+      "status": "pass"
+    },
+    "fixed_contrast_profile_agrees_with_successful_native_interval": {
+      "status": "pass"
+    },
+    "failed_refit_and_try_error_are_explicitly_rejected": {
+      "status": "pass"
+    },
+    "independent_three_variable_overidentified_model": {
+      "status": "pass"
+    },
+    "underidentified_model_rejected": {
+      "status": "pass"
+    },
+    "Holm_families_and_fixed_sampling_covariance": {
+      "status": "pass"
+    }
+  },
+  "public_numerical_tests": {
+    "counts_same_n_and_independent_algebra": {
+      "status": "pass"
+    },
+    "permutation_and_variable_renaming": {
+      "status": "pass"
+    },
+    "invalid_data_and_unsupported_scope_rejected": {
+      "status": "pass"
+    },
+    "profile_solvers_agree_with_native_intervals": {
+      "status": "pass"
+    },
+    "optimizer_failure_and_multiplicity_checks": {
+      "status": "pass"
+    }
+  },
+  "public_CLI_tests": {
+    "offline_archived_code_reproduction": {
+      "status": "pass"
+    },
+    "artifact_tampering_rejected": {
+      "status": "pass"
+    },
+    "different_data_and_model_end_to_end": {
+      "status": "pass"
+    },
+    "failed_analysis_has_no_success_manifest": {
+      "status": "pass"
+    }
+  },
+  "engine_sha256": {
+    "scripts/analysis.R": "4a7cac6efcac7eb4c7d700fce3aa700b81433359415f12e80688d100f49457d2",
+    "scripts/data.R": "1de79084413f0f5dd9af8d150c6393627ab6af88b5762353bc21622d9c5fc824",
+    "scripts/main.R": "7964a1622fd057fd411b19fa1fe462cfd76b96417330dfb885f9baeb8f4ab70c",
+    "scripts/masem.py": "5eaaf4ee34e0a1d606930482cdc1f3f3a8e107c93ece1815fbe67b9d01919434",
+    "scripts/setup.R": "34bef12c8e833ee5c7b0b626e4520a83c095850296ff2b638a30816a77d8736a",
+    "scripts/stage1.R": "b1e96e6ef4f7b24450d66971afafdafc3bc949775b0ac568bebe4c06bc789100",
+    "scripts/stage2.R": "d2bb126c728c97acc79c71903639a5460eed66c2ec0ac282a2e40816c11bd3aa"
+  },
+  "maximum_independent_profile_cutoff_error": 3.29361012685325e-07
+}

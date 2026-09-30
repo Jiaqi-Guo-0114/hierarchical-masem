@@ -1,0 +1,6 @@
+interface:
+  display_name: "层级 MASEM 元分析结构方程"
+  short_description: "完整相关矩阵的层级两阶段 MASEM、分类调节、直接路径比较与可复现核验"
+  default_prompt: "Use $hierarchical-masem to validate my correlation matrices and run a reproducible hierarchical two-stage MASEM."
+policy:
+  allow_implicit_invocation: true

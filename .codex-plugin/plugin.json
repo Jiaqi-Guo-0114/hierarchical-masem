@@ -1,0 +1,33 @@
+{
+  "name": "hierarchical-masem",
+  "version": "0.1.0",
+  "description": "Hierarchical two-stage MASEM for psychology and social science / 心理学与社会科学层级元分析结构方程",
+  "author": {
+    "name": "Jiaqi-Guo-0114"
+  },
+  "license": "MIT",
+  "keywords": [
+    "MASEM",
+    "TSSEM",
+    "meta-analysis",
+    "psychology",
+    "metaSEM",
+    "metafor"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Hierarchical MASEM · 层级元分析结构方程",
+    "shortDescription": "Complete correlation matrices, categorical moderators and checked profile-WLS intervals.",
+    "developerName": "Jiaqi-Guo-0114",
+    "category": "Education & Research",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Workflow",
+      "Offline Analysis"
+    ],
+    "defaultPrompt": [
+      "Use $hierarchical-masem to analyze complete correlation matrices with independent samples nested in studies."
+    ]
+  }
+}

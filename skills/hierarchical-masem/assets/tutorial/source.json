@@ -1,0 +1,21 @@
+{
+  "doi": "10.1177/25152459261466637",
+  "osf_node": "4cfre",
+  "retrieved": "2026-09-30",
+  "access": "read-only link published in the supplied article",
+  "license": "Article: CC BY-NC 4.0. OSF files: no separate license declared; retained locally as verification inputs, not licensed as our code.",
+  "files": [
+    {
+      "file": "code-original.R",
+      "sha256": "d26e7bbe2cf0b07c7d46f0871a846a2aec03a8b81f8a71e10a8ea4f657b30b99",
+      "osf_guid": "uafjt",
+      "version": 1
+    },
+    {
+      "file": "Flow_and_BigFive.xlsx",
+      "sha256": "fa51371203afee42dd4a338f7e4f476d6a2465af61832cb7c17d4ef19881a852",
+      "osf_guid": "8hkaz",
+      "version": 1
+    }
+  ]
+}

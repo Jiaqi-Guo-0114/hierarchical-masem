@@ -1,6 +1,6 @@
 {
   "name": "hierarchical-masem",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Hierarchical two-stage MASEM for psychology and social science / 心理学与社会科学层级元分析结构方程",
   "author": {
     "name": "Jiaqi-Guo-0114"
@@ -17,7 +17,7 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Hierarchical MASEM · 层级元分析结构方程",
-    "shortDescription": "Complete correlation matrices, categorical moderators and checked profile-WLS intervals.",
+    "shortDescription": "From study correlations to path models, group comparisons, and shareable bilingual results.",
     "developerName": "Jiaqi-Guo-0114",
     "category": "Education & Research",
     "capabilities": [

@@ -1,7 +1,8 @@
 {
   "status": "verified_for_declared_scope",
-  "verified_local_date": "2026-10-02",
+  "verified_local_date": "2026-10-01",
   "tutorial_numerical_test_groups": 23,
+  "tutorial_CLI_test_groups": 4,
   "public_synthetic_numerical_test_groups": 5,
   "tutorial_failed_intervals": 0,
   "recovered_profile_intervals": 7,
@@ -40,8 +41,9 @@
     "residual_variance": 0.831469704780545
   },
   "public_package_status": "pass",
-  "public_synthetic_CLI_test_groups": 6,
-  "public_package_test_groups": 43,
+  "public_synthetic_CLI_test_groups": 4,
+  "public_package_test_groups": 9,
+  "standalone_plugin_install_status": "pass",
   "tutorial_interval_count": 38,
   "tutorial_numerical_tests": {
     "author_counts_and_same_n_independent_samples": {
@@ -138,12 +140,6 @@
     "artifact_tampering_rejected": {
       "status": "pass"
     },
-    "report_tampering_rejected": {
-      "status": "pass"
-    },
-    "demo_preflight_preserves_inputs": {
-      "status": "pass"
-    },
     "different_data_and_model_end_to_end": {
       "status": "pass"
     },
@@ -152,37 +148,13 @@
     }
   },
   "engine_sha256": {
-    "scripts/analysis.R": "2c45e0305dcf97af684696ff4f8e662d93f36645f5cc26aa23a1173c96785950",
-    "scripts/data.R": "9425fe162c69bbb48d24f305f0f4160783cb6ca95b0448ed69320d47b0f6c14c",
+    "scripts/analysis.R": "4a7cac6efcac7eb4c7d700fce3aa700b81433359415f12e80688d100f49457d2",
+    "scripts/data.R": "1de79084413f0f5dd9af8d150c6393627ab6af88b5762353bc21622d9c5fc824",
     "scripts/main.R": "7964a1622fd057fd411b19fa1fe462cfd76b96417330dfb885f9baeb8f4ab70c",
-    "scripts/masem.py": "80cb7d9c3192398d233db6d268670762ee34d840caccd8d2c497b9a0823c17d8",
-    "scripts/report.py": "5f657fab86d5ee1091dc8c801f341e246a150820feeb9bad26991ea02894ec66",
+    "scripts/masem.py": "5eaaf4ee34e0a1d606930482cdc1f3f3a8e107c93ece1815fbe67b9d01919434",
     "scripts/setup.R": "34bef12c8e833ee5c7b0b626e4520a83c095850296ff2b638a30816a77d8736a",
     "scripts/stage1.R": "b1e96e6ef4f7b24450d66971afafdafc3bc949775b0ac568bebe4c06bc789100",
     "scripts/stage2.R": "d2bb126c728c97acc79c71903639a5460eed66c2ec0ac282a2e40816c11bd3aa"
   },
-  "maximum_independent_profile_cutoff_error": 3.29361012685325e-07,
-  "software_version": "0.2.0",
-  "html_report_test_cases": 16,
-  "report_wording_test_cases": 11,
-  "analysis_options_test_groups": 5,
-  "legacy_manifest_compatibility": "schema 1 archived tutorial passes current verify",
-  "baseline_release_record": "v0.1.0.json",
-  "analysis_options_tests": {
-    "valid_options_and_defaults": {
-      "status": "pass"
-    },
-    "malformed_sensitivity_settings_rejected": {
-      "status": "pass"
-    },
-    "unknown_and_duplicate_path_requests_rejected": {
-      "status": "pass"
-    },
-    "undeclared_or_inapplicable_followups_rejected": {
-      "status": "pass"
-    },
-    "public_input_validation_uses_options_check": {
-      "status": "pass"
-    }
-  }
+  "maximum_independent_profile_cutoff_error": 3.29361012685325e-07
 }

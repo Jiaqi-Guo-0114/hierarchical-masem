@@ -10,7 +10,6 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
-import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -95,17 +94,38 @@ def run(project, runtime):
         write_json(out/'failure.json', {'status':'failed','message':completed.stderr.strip()})
         raise ValueError(f'Analysis failed; diagnostic record: {out}/failure.json\n{completed.stderr.strip()}')
     result = json.loads((out/'results.json').read_text())
+    try:
+        from report import write_html_report
+        report = write_html_report(out)
+    except Exception as exc:
+        write_json(out/'failure.json', {'status':'failed','message':'Report generation failed: '+str(exc)})
+        raise ValueError(f'Report generation failed; analysis files are retained in {out}: {exc}') from exc
     files = {str(p.relative_to(out)):sha(p) for p in sorted(out.rglob('*')) if p.is_file()}
-    write_json(out/'manifest.json', {'schema_version':1,'created_utc':stamp,'runtime':str(runtime),
+    write_json(out/'manifest.json', {'schema_version':2,'created_utc':stamp,'runtime':str(runtime),
         'source_inputs': {str(data):sha(data),str(model):sha(model),str(project/'config.json'):sha(project/'config.json')},
         'files':files, 'analysis_status':result['status']})
-    return {'status': result['status'], 'run':str(out)}
+    return {'status': result['status'], 'run':str(out), 'report_html':str(report)}
+
+def demo(project, runtime):
+    """Complete a synthetic example without changing existing project files."""
+    ready = rcall('check', runtime)
+    if ready.returncode:
+        raise ValueError(ready.stderr.strip() or ready.stdout.strip())
+    initialize(project, example=True)
+    answer = run(project, runtime)
+    verify(Path(answer['run']), runtime)
+    answer.update(verification='pass', data_role='synthetic_software_example')
+    return answer
 
 def verify(out, runtime):
     manifest = json.loads((out/'manifest.json').read_text())
     errors = []
+    if manifest.get('schema_version') not in (1, 2):
+        errors.append('unsupported run manifest version')
     required = ['results.json','data_checks.json','pooled_correlations.csv','pooled_acov.csv',
                 'stage1_models.csv','paths.csv','report.md','sessionInfo.txt','fit_objects.rds']
+    if manifest.get('schema_version') == 2:
+        required.append('report.html')
     for f in required:
         if f not in manifest['files']:
             errors.append('missing required artifact: '+f)
@@ -131,7 +151,7 @@ def verify(out, runtime):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('command',choices=['setup','check','init','validate','run','verify','benchmark'])
+    p.add_argument('command',choices=['setup','check','init','demo','validate','run','verify','benchmark'])
     p.add_argument('--runtime',type=Path)
     p.add_argument('--project',type=Path)
     p.add_argument('--run',type=Path)
@@ -154,6 +174,7 @@ def main():
         if not a.project:raise ValueError('--project is required')
         project=a.project.expanduser().resolve()
         if a.command=='init':ans=initialize(project,a.tutorial,a.example,a.tutorial_data)
+        elif a.command=='demo':ans=demo(project,runtime)
         elif a.command=='validate':
             c=rcall('validate',runtime,project)
             if c.returncode:raise ValueError(c.stderr.strip() or c.stdout.strip())

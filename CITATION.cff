@@ -4,8 +4,8 @@ title: "Hierarchical MASEM: a reproducible Codex skill for psychology and social
 type: software
 authors:
   - name: "Jiaqi-Guo-0114"
-version: 0.1.0
-date-released: 2026-10-01
+version: 0.2.0
+date-released: 2026-10-02
 license: MIT
 url: "https://github.com/Jiaqi-Guo-0114/hierarchical-masem"
 repository-code: "https://github.com/Jiaqi-Guo-0114/hierarchical-masem"

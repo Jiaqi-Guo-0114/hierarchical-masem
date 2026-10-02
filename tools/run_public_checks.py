@@ -1,4 +1,4 @@
-"""Run the public synthetic package, numerical suite and offline CLI replay."""
+"""Check the public example, reports, input validation and offline replay."""
 import argparse
 import json
 import os
@@ -26,14 +26,18 @@ try:
     cli=[sys.executable,str(skill/'scripts/masem.py')]
     if a.setup:call('setup',cli+['setup'])
     runtime=json.loads(call('runtime',cli+['check']))['runtime']
+    call('html-report',[sys.executable,'-m','unittest','discover','-s',str(skill/'tests'),'-p','test_report.py','-v'])
+    call('report-wording',['Rscript','--vanilla',str(skill/'tests/report_wording.R'),str(skill)])
+    call('options',['Rscript','--vanilla',str(skill/'tests/options_validation.R'),str(skill),runtime,str(scratch/'options.json')])
     project=scratch/'example'
-    call('init',cli+['init','--example','--project',str(project)])
-    run=json.loads(call('analysis',cli+['run','--project',str(project)]))['run']
-    call('verify',cli+['verify','--run',run])
+    demo=json.loads(call('demo',cli+['demo','--project',str(project)]))
+    if demo['verification']!='pass' or not Path(demo['report_html']).is_file():
+        raise AssertionError('Demo did not return a verified browser report')
+    run=demo['run']
     call('numerical',['Rscript','--vanilla',str(skill/'tests/example_acceptance.R'),str(skill),runtime,run,str(scratch/'numerical.json')])
     call('offline-cli',[sys.executable,str(skill/'tests/cli_acceptance.py'),str(skill),run,str(scratch/'cli'),str(scratch/'cli.json')])
-    reports={name:json.loads((scratch/(name+'.json')).read_text()) for name in ['numerical','cli']}
-    result={'status':'pass','data_role':'synthetic_software_tests','run':run,'reports':reports}
+    reports={name:json.loads((scratch/(name+'.json')).read_text()) for name in ['numerical','cli','options']}
+    result={'status':'pass','data_role':'synthetic_software_tests','run':run,'reports':reports,'html_report_tests':'pass','report_wording_tests':'pass'}
 except Exception as e:
     result={'status':'fail','message':str(e)}
 (scratch/'checks.json').write_text(json.dumps(result,indent=2)+'\n')

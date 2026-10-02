@@ -1,6 +1,6 @@
 # Verification and saved outputs
 
-The declared core scope passed 23 numerical/input test groups and 4 CLI/reproduction test groups on 2026-10-01; see [saved validation record](validation-record.json). All requested tutorial intervals succeeded, including seven recovered by checked profile refits. Public synthetic checks are documented with the release. This is computational validation, not simulation validation of coverage or error rates.
+The v0.2.0 release passed 23 tutorial numerical/input groups and the 43 public example, CLI, configuration and report checks on 2026-10-02; see the [saved validation record](validation-record.json). All requested tutorial intervals succeeded, including seven recovered by checked profile refits. Earlier schema-1 archives remain verifiable. This is computational validation, not simulation validation of coverage or error rates.
 
 `check` verifies the R version and all 46 locked package versions in the isolated library. Runtime paths are keyed by the lockfile hash. The old workbench lock is untouched. `setup` restores this new environment; other commands do not download or update software.
 
@@ -15,6 +15,7 @@ Successful runs contain:
 - `profile_audit.csv`: recovered profile endpoints, convergence, independent WLS objectives, chi-square cutoffs, unit-variance errors and admissibility.
 - `group_paths.csv`, group matrices, `moderator_omnibus.json`, `moderator_path_tests.csv`, `moderator_pairwise.csv` when moderation applies.
 - `sensitivity.csv`, `moderator_sensitivity.csv`, `study_influence.csv`, and BIC-alternative path output when the criteria select different models.
+- `report.html`: standalone bilingual overview with paths, direct comparisons and robustness results; no external assets or network access.
 - `report.md`, `methods-building-blocks.md`: result summary and analysis-only Methods building blocks; no invented search strategy, ethics declaration, or preregistration.
 - `technical-notes.json`, `results.json`, `fit_objects.rds`, `sessionInfo.txt`, `run.log`, `manifest.json`, input and code snapshots.
 

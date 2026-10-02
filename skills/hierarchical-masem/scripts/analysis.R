@@ -113,7 +113,26 @@ independent_oracle <- function(R,acov,spec,paths) {
 
 write_report <- function(x,selected,sem,mod,sens,diagnostics,out) {
   tab<-sem$paths
-  lines<-c('# 层级 MASEM 分析结果','',sprintf('纳入 %d 项研究、%d 个独立样本、%d 个相关系数；总样本量为 %d。',x$checks$n_studies,x$checks$n_samples,x$checks$n_correlations,x$checks$n_total),'',
+  synthetic<-is.character(x$cfg$data_role) && length(x$cfg$data_role)==1L &&
+    grepl('^synthetic([_-]|$)',x$cfg$data_role,ignore.case=TRUE)
+  synthetic_zh<-if(synthetic)'**合成数据演示：以下结果来自人工软件测试数据，不能作为心理学研究证据。**' else character()
+  synthetic_en<-if(synthetic)'**SYNTHETIC DEMONSTRATION: These results use artificial software test data and are not psychological research evidence.**' else character()
+  failed_intervals<-sum(!tab$ci_status %in% 'ok')+sum(!sens$grid$ci_status %in% 'ok')+
+    if(is.null(mod))0L else sum(!mod$group_paths$ci_status %in% 'ok')+sum(!mod$pairwise$ci_status %in% 'ok')
+  has_grid<-is.data.frame(sens$grid) && nrow(sens$grid)>0L
+  sensitivity_zh<-if(has_grid)'敏感性分析保持完整抽样协方差不变，并将替代工作相关设定传递到第二阶段。' else '本次未执行工作相关设定的敏感性分析。'
+  sensitivity_en<-if(has_grid)'Sensitivity analyses held the sampling covariance fixed while varying the working random-effects correlations.' else 'Working-correlation sensitivity analyses were not performed in this run.'
+  has_loo<-is.data.frame(sens$loo) && nrow(sens$loo)>0L
+  if(has_loo){
+    loo_status<-vapply(split(sens$loo$status,sens$loo$omitted_study),function(z)all(z %in% 'ok'),TRUE)
+    loo_ok<-sum(loo_status);loo_failed<-sum(!loo_status)
+    loo_zh<-sprintf('逐研究删除诊断固定主分析的异质性结构；%d 项重拟合成功，%d 项失败。',loo_ok,loo_failed)
+    loo_en<-sprintf('Leave-one-study-out diagnostics retained the selected heterogeneity structure; %d study-deletion refits succeeded and %d failed.',loo_ok,loo_failed)
+  }else{
+    loo_zh<-'本次未执行逐研究删除诊断。'
+    loo_en<-'Leave-one-study-out diagnostics were not performed in this run.'
+  }
+  lines<-c('# 层级 MASEM 分析结果','',synthetic_zh,if(synthetic)'',sprintf('纳入 %d 项研究、%d 个独立样本、%d 个相关系数；总样本量为 %d。',x$checks$n_studies,x$checks$n_samples,x$checks$n_correlations,x$checks$n_total),'',
     '第一阶段在原始 Pearson 相关尺度上使用完整抽样协方差，比较四种 CS/HCS 随机效应结构。',
     paste0('按 AIC 选择：',selected$selected,'。第二阶段使用合并相关及其渐近协方差进行 WLS 路径分析。区间为 95% likelihood-based 区间。'),'',
     '| 路径 | 估计 | 95% 区间 | 区间状态 |','|---|---:|---|---|')
@@ -123,22 +142,27 @@ write_report <- function(x,selected,sem,mod,sens,diagnostics,out) {
   }
   if(sem$stats$saturated)lines<-c(lines,'','该路径模型为饱和模型（df = 0），整体拟合不能用来支持理论结构。')
   else lines<-c(lines,'',sprintf('WLS χ²(%d) = %.4f，p = %.4f。',sem$stats$df,sem$stats$chi_square,sem$stats$p))
+  has_followups<-!is.null(mod) && (nrow(mod$path_tests)>0L || nrow(mod$pairwise)>0L)
   if(!is.null(mod))lines<-c(lines,'',sprintf('分类调节整体检验：Δχ²(%d) = %.4f，p = %.4f。',mod$omnibus$df,mod$omnibus$delta_chi_square,mod$omnibus$p_raw),
-    paste0('后续比较角色：',x$cfg$moderation$mode %||% 'none','；逐路径和两两比较分别在各自预设检验族内使用 Holm 校正。两两差异区间为未作同时覆盖校正的 95% 区间。'),
+    if(has_followups)paste0('后续比较角色：',x$cfg$moderation$mode %||% 'none','；请求的逐路径和两两比较分别在各自声明的检验族内使用 Holm 校正。'),
+    if(nrow(mod$pairwise)>0L)'两两差异区间为未作同时覆盖校正的 95% 区间。',
     '非显著结果表示未检出组间差异，不构成等效性证据。')
   if(!is.null(mod)){
     nf<-sum(mod$group_paths$ci_status!='ok')+sum(mod$pairwise$ci_status!='ok')
     if(nf>0)lines<-c(lines,'',sprintf('亚组路径与组间差异中有 %d 个区间未得到有效解，已在对应表格标记为 failed；这些数值边界不能作为有效置信区间引用。',nf))
   }
-  lines<-c(lines,'','敏感性分析保持完整抽样协方差不变，并将替代工作相关设定传递到第二阶段。逐研究删除诊断固定主分析的异质性结构，用于检查研究影响。',
+  if(failed_intervals>0L)lines<-c(lines,'',sprintf('本次分析中有 %d 个请求的区间未得到有效解，详见路径、调节与敏感性表中的区间状态；失败的数值边界不能作为有效置信区间引用。',failed_intervals))
+  lines<-c(lines,'',sensitivity_zh,loo_zh,
     '路径系数表示基于综合相关的条件关联；组间调节属于研究层面的比较，不提供个体层面的因果证据。',
     '本教程所整合的工作模型选择和多组检验流程尚缺系统模拟验证；推断及区间均条件于所选第一阶段模型。')
   writeLines(lines,file.path(out,'report.md'),useBytes=TRUE)
-  method<-c('# Methods building blocks','',sprintf('The analysis included %d studies contributing %d independent samples (N = %d).',x$checks$n_studies,x$checks$n_samples,x$checks$n_total),
+  method<-c('# Methods building blocks','',synthetic_en,if(synthetic)'',sprintf('The analysis included %d studies contributing %d independent samples (N = %d).',x$checks$n_studies,x$checks$n_samples,x$checks$n_total),
     'Raw Pearson correlation matrices were synthesized using multilevel multivariate random-effects models. Sampling covariances were calculated within independent samples using metafor::rcalc. Four combinations of compound-symmetry and heterogeneous compound-symmetry heterogeneity structures were estimated by restricted maximum likelihood, with identical fixed effects and sampling covariance inputs. The lowest-AIC admissible model was selected; BIC and nested working-model comparisons were also reported.',
-    paste0('The selected structure was ',selected$selected,'. The pooled correlation vector and its estimated covariance were aligned by variable-pair identifiers before fitting the specified structural model with metaSEM::wls. Implied variances were constrained to one. Ninety-five percent likelihood-based intervals were obtained by native interval searches or, when these failed, by fixing the target parameter or contrast and refitting nuisance parameters until the WLS objective increased by the 95th percentile of a one-degree-of-freedom chi-square distribution. Profile endpoints were checked for convergence, unit variances, matrix admissibility, and agreement with an independently evaluated WLS objective.'),
-    'Sensitivity analyses held the sampling covariance fixed while varying the working random-effects correlations. Leave-one-study-out diagnostics retained the selected heterogeneity structure. Inference was conditional on that selection; the integrated workflow has not been comprehensively evaluated in simulation.',
-    if(!is.null(mod))paste0('The categorical moderator was analyzed through independent study-disjoint groups. Equality constraints were compared using differences in the WLS fit function. Follow-up comparisons were classified as ',x$cfg$moderation$mode %||% 'none',', with Holm adjustment within the declared path and pairwise families.') else '')
+    paste0('The selected structure was ',selected$selected,'. The pooled correlation vector and its estimated covariance were aligned by variable-pair identifiers before fitting the specified structural model with metaSEM::wls. Implied variances were constrained to one. Ninety-five percent likelihood-based intervals were sought using native interval searches or, when these failed, by fixing the target parameter or contrast and refitting nuisance parameters until the WLS objective increased by the 95th percentile of a one-degree-of-freedom chi-square distribution. Accepted profile endpoints were checked for convergence, unit variances, matrix admissibility, and agreement with an independently evaluated WLS objective.'),
+    if(failed_intervals>0L)sprintf('%d requested intervals could not be estimated successfully and remain explicitly marked as failed in the corresponding output tables.',failed_intervals),
+    sensitivity_en,loo_en,'Inference was conditional on the selected Stage 1 model; the integrated workflow has not been comprehensively evaluated in simulation.',
+    if(!is.null(mod))'The categorical moderator was analyzed through independent study-disjoint groups. Equality constraints were compared using differences in the WLS fit function.',
+    if(has_followups)paste0('Follow-up comparisons were classified as ',x$cfg$moderation$mode %||% 'none',', with Holm adjustment within the declared path and pairwise families.'))
   writeLines(method,file.path(out,'methods-building-blocks.md'),useBytes=TRUE)
   jwrite(list(diagnostics=diagnostics,corrections=c('N is summed once per study/sample identity, not once per distinct numeric sample size.',
     'Sampling covariance V is unchanged in rho/phi sensitivity analyses.',
@@ -231,7 +255,7 @@ analyze <- function(project,out) {
   profile_audit<-profile_records(objects)
   cwrite(profile_audit,file.path(out,'profile_audit.csv'))
     versions<-setNames(lapply(c('metafor','metaSEM','OpenMx','readxl','renv'),function(p)utils::packageDescription(p)$Version),c('metafor','metaSEM','OpenMx','readxl','renv'))
-  result<-list(schema_version=1,status=if(length(diagnostics))'complete_with_diagnostics' else 'complete',
+  result<-list(schema_version=1,data_role=x$cfg$data_role %||% 'user_supplied',status=if(length(diagnostics))'complete_with_diagnostics' else 'complete',
     n_studies=x$checks$n_studies,n_samples=x$checks$n_samples,n_total=x$checks$n_total,stage1_model=selected$selected,
     stage2=list(status=sem$status,fit=sem$stats,optimizer_status=sem$fit@output$status$code,
        intervals_complete=all(sem$paths$ci_status=='ok')),moderation=if(is.null(mod))NULL else mod$omnibus,

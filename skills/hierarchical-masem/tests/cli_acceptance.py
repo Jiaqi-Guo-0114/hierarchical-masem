@@ -70,6 +70,27 @@ def tamper():
     assert 'changed: paths.csv' in e['message']
     return 'Modified result rejected by SHA-256 verification'
 
+def report_tamper():
+    target = scratch/'tampered-html'
+    shutil.copytree(baseline, target)
+    with (target/'report.html').open('a') as f: f.write('altered report')
+    e = call(cli,'verify','--run',target,success=False)
+    assert 'changed: report.html' in e['message']
+    return 'Changed browser report rejected by artifact verification'
+
+def demo_preflight():
+    project = scratch/'existing-project'
+    project.mkdir()
+    sentinel = project/'keep.txt'
+    sentinel.write_text('existing user data')
+    e = call(cli,'demo','--project',project,success=False)
+    assert 'never overwritten' in e['message']
+    assert sentinel.read_text() == 'existing user data' and len(list(project.iterdir())) == 1
+    missing = scratch/'no-runtime-project'
+    e = call(cli,'demo','--project',missing,'--runtime',scratch/'missing-runtime',success=False)
+    assert not missing.exists() and 'setup' in e['message'].lower()
+    return 'Existing files preserved; missing runtime fails before creating a project'
+
 def alternate():
     project = scratch/'synthetic-three-variable'
     call(cli,'init','--project',project)
@@ -108,6 +129,8 @@ def failure_record():
 
 test('offline_archived_code_reproduction', repeat)
 test('artifact_tampering_rejected', tamper)
+test('report_tampering_rejected', report_tamper)
+test('demo_preflight_preserves_inputs', demo_preflight)
 test('different_data_and_model_end_to_end', alternate)
 test('failed_analysis_has_no_success_manifest', failure_record)
 ok=all(t['status']=='pass' for t in results.values())

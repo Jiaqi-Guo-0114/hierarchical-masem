@@ -13,6 +13,32 @@ pair_map <- function(vars) {
              i=ij[,1],j=ij[,2],stringsAsFactors=FALSE)
 }
 
+validate_analysis_options <- function(cfg,spec,has_groups) {
+  # Validate requests before the first statistical fit, so a typo cannot leave
+  # the user waiting for a run whose requested comparisons cannot be performed.
+  settings<-cfg$sensitivity$settings %||% list(c(0,0),c(.5,.5),c(1,1))
+  settings<-lapply(settings,asvec)
+  values<-unlist(settings,use.names=FALSE)
+  if(!length(settings)||any(lengths(settings)!=2L)||!is.numeric(values)||
+     any(!is.finite(values))||any(values<0|values>1))
+    fail('sensitivity.settings must contain nonempty numeric [rho,phi] pairs in [0,1].')
+  loo<-cfg$sensitivity$leave_one_study_out
+  if(!is.null(loo)&&(!is.logical(loo)||length(loo)!=1L||is.na(loo)))
+    fail('sensitivity.leave_one_study_out must be true or false.')
+  mode<-cfg$moderation$mode %||% 'none'
+  if(length(mode)!=1L||!is.character(mode)||!mode%in%c('none','planned','exploratory'))
+    fail('moderation.mode must be none, planned, or exploratory.')
+  paths<-as.character(asvec(cfg$moderation$path_tests %||% list()))
+  pairwise<-as.character(asvec(cfg$moderation$pairwise_paths %||% list()))
+  if(anyDuplicated(paths)||anyDuplicated(pairwise)||!all(c(paths,pairwise)%in%spec$paths$path))
+    fail('Invalid or duplicate moderation path labels; use directed path labels from model.json.')
+  if(length(c(paths,pairwise))){
+    if(mode=='none')fail('Follow-up tests need explicit planned or exploratory mode.')
+    if(!has_groups)fail('Requested moderation follow-ups require a categorical moderator in config.json.')
+  }
+  invisible(TRUE)
+}
+
 read_inputs <- function(project) {
   cfg<-jread(file.path(project,'config.json'))
   if (!identical(cfg$schema_version,1L)) fail('Unsupported config schema_version; expected 1.')
@@ -91,6 +117,7 @@ read_inputs <- function(project) {
   }
   model<-jread(file.path(project,cfg$model_file %||% 'model.json'))
   spec<-read_model(model,vars)
+  validate_analysis_options(cfg,spec,!is.null(mod))
   report<-list(status='valid',n_studies=length(unique(d$study_id)),n_samples=nrow(registry),
        n_correlations=nrow(d),n_total=sum(registry$n),legacy_unique_n=sum(unique(d$n)),
        sample_independence=cfg$sample_independence,variables=vars,

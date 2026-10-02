@@ -1,84 +1,61 @@
 # Hierarchical MASEM
 
-[简体中文](README.zh-CN.md) · [Method](skills/hierarchical-masem/references/method.md) · [Validation](validation/README.md)
+**Turn correlations from multiple studies into a reproducible analysis of your theoretical path model.**
 
-A Codex skill and an executable R workflow for hierarchical two-stage meta-analytic structural equation modeling in psychology and the social sciences. It implements the core framework taught by [Dang (2026)](https://doi.org/10.1177/25152459261466637), with documented corrections and reproducibility checks. The statistical method belongs to the cited authors; this repository provides an independent implementation.
+[简体中文](README.zh-CN.md) · [Get started](docs/getting-started.md) · [Method](skills/hierarchical-masem/references/method.md) · [Validation](validation/README.md)
 
-Version **0.1.0** supports complete Pearson correlation matrices from independent participant samples nested within studies, observed-variable acyclic RAM path models, and categorical moderators whose groups share no studies. Incomplete matrices, continuous moderators, overlapping participants, latent/feedback models, and automatic indirect-effect inference are outside this release.
+Hierarchical MASEM helps psychology and social-science researchers synthesize relationships among several variables, fit a path model, and compare that model across study categories. It handles independent samples nested within studies and carries uncertainty from correlation pooling into the path analysis.
 
-## What it does
+Use it as a **Codex skill** with your data and research question, or run the same **R analysis workflow** from the command line.
 
-- Calculates the complete within-sample sampling covariance using `metafor::rcalc()` on raw correlations.
-- Fits all four CS/HCS heterogeneity combinations by REML and selects the admissible minimum-AIC model; reports BIC, eligible nested comparisons, convergence and boundaries.
-- Aligns pooled correlations with their covariance and fits `metaSEM::wls()` with implied unit variances and 95% likelihood-based WLS intervals.
-- Tests overall, specified path and pairwise group differences directly, with separate declared Holm families.
-- Keeps the full sampling covariance fixed in working-correlation sensitivity analyses and follows changes through Stage 2 and moderation.
-- Saves validated inputs, estimates, figures, diagnostics, endpoint audits, executable code, a package lock and artifact hashes for each run.
+## Questions it helps you answer
 
-When native interval search fails, a bounded fallback profiles the same WLS objective by fixing the parameter or contrast and refitting nuisance parameters. Recovered endpoints require convergence, unit variances, nonnegative residual variances, positive-definite implied correlations and an independently checked objective cutoff. Unsuccessful recovery remains an explicit failure. No Wald substitution is presented as a likelihood-based interval.
+- **What do the studies say together?** Pool a set of correlations while accounting for the study and sample hierarchy.
+- **How does my theoretical model fit the pooled evidence?** Estimate observed-variable paths, their uncertainty, and model fit where the model has testable restrictions.
+- **Do paths differ across study categories?** Test overall, specified-path, and pairwise group differences directly.
+- **How stable are the conclusions?** Examine working-correlation assumptions, influential studies, and changes in the final path estimates.
 
-## Install as a skill
+## From extraction table to results
 
-Requires Python **3.9+**, R **4.6.0**, and the 46 package versions in the included lockfile. The verified platform is macOS. Other platforms have not been certified by this release; source package installation may require compilers and system libraries.
+| You provide | You receive |
+| --- | --- |
+| Complete correlation matrices in CSV or XLSX, with study/sample IDs and sample sizes | Data checks, sample accounting, and a pooled correlation matrix |
+| Your variables and theoretical path model | Path estimates, 95% likelihood-based intervals, and PNG/PDF figures |
+| Optional categorical moderators and planned comparisons | Direct group comparisons with Holm-adjusted tests |
+| Analysis choices recorded in a configuration file | A browser-readable results overview, sensitivity results, Methods building blocks, and a reproducible run archive |
 
-```sh
-git clone https://github.com/Jiaqi-Guo-0114/hierarchical-masem.git
-cd hierarchical-masem
-mkdir -p ~/.codex/skills
-cp -R skills/hierarchical-masem ~/.codex/skills/
-```
+## Why use this workflow?
 
-Use a new Codex session and invoke `$hierarchical-masem`. Inspect an existing skill folder before copying into it. For Codex installations supporting plugins, the optional equivalent route is:
+**One connected analysis.** Data checks, correlation pooling, path estimation, group comparisons, and sensitivity analysis use the same inputs and configuration.
 
-```sh
-codex plugin marketplace add Jiaqi-Guo-0114/hierarchical-masem
-codex plugin add hierarchical-masem@hierarchical-masem-community
-```
+**Your research model.** Replace the variables and paths with your own observed-variable model; you are not limited to the tutorial example.
 
-Choose either skill or plugin installation. The existing personal `psych-meta-workbench` integration can continue using its own route without installing a second copy.
+**Results you can inspect and share.** A bilingual results page, editable tables, and publication-friendly figures come with diagnostics, saved code, and a locked R environment. Each run is saved separately so collaborators can inspect and reproduce it.
 
-## Run the synthetic example
+## Try it
 
-The bundled example is artificial software test data. It is not evidence about any psychological association.
+[Download an example results report](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/download/v0.2.0/example-report.html) to see the output before installing. Open the downloaded HTML in a browser; it uses clearly labeled synthetic data.
 
-```sh
-python3 skills/hierarchical-masem/scripts/masem.py setup
-python3 skills/hierarchical-masem/scripts/masem.py check
-python3 skills/hierarchical-masem/scripts/masem.py init --example --project my-example
-python3 skills/hierarchical-masem/scripts/masem.py validate --project my-example
-python3 skills/hierarchical-masem/scripts/masem.py run --project my-example
-python3 skills/hierarchical-masem/scripts/masem.py verify --run my-example/runs/<returned-run-id>
-```
+Start with the bundled synthetic example—no research data required. Follow the [quick start](docs/getting-started.md) to prepare the runtime, then use `demo` to run the example and get a browser-ready results page. Python 3.9+ and R 4.6.0 are required; the current verified platform is macOS.
 
-`setup` restores a separate environment keyed by the lockfile hash; it does not modify another analysis project's library. Analysis and verification commands are offline. R itself must already be installed at the pinned version. Each run creates a new directory and archives its actual executable source. `REPRODUCE.md` explains how to rerun it independently of later skill updates.
+After [installing the Codex skill](docs/getting-started.md#use-with-codex), you can ask:
 
-## Analyze your data
+> Use hierarchical-masem to analyze these complete Pearson correlation matrices. Independent samples are nested within studies. Fit my theoretical path model, compare the specified study categories, and deliver path estimates, figures, sensitivity results, and reproducibility files.
 
-Initialize with `init --project my-analysis`, fill the table, configuration and RAM model, then validate, run and verify as above. A long table needs `study_id`, `sample_id`, `var1`, `var2`, `r`, and `n`; CSV and XLSX column mappings are supported. Provide all off-diagonal correlations for every sample. Sample N is counted once per identity, including distinct samples with identical numeric N.
+Prefer a script? The [command-line guide](docs/getting-started.md#try-the-synthetic-example) uses the same analysis engine and includes a complete example.
 
-Confirm sample independence from study coding. IDs cannot prove independence. Define construct directions, duplicate-report crosswalks, the theoretical model and planned/exploratory contrasts before interpretation. See the [data contract](skills/hierarchical-masem/references/data-contract.md).
+## Is it right for your study?
 
-In Codex, a suitable request is: “Use hierarchical-masem to analyze these complete Pearson matrices from independent samples nested in studies. Fit my RAM model, test the specified categorical group contrasts, and deliver results, sensitivity checks and reproducibility records.”
+This release supports **complete Pearson correlation matrices**, **independent participant samples nested within studies**, **observed-variable acyclic path models**, and **categorical moderator groups that share no studies**.
 
-## Reproduce the tutorial
+Incomplete matrices, continuous moderators, overlapping samples, latent or feedback models, and automatic indirect-effect inference need a different workflow. See the [input specification](skills/hierarchical-masem/references/data-contract.md) before preparing a new analysis.
 
-Author data, code and article PDFs are **not redistributed**. Obtain the original supplement through the [article](https://doi.org/10.1177/25152459261466637). The [source record](skills/hierarchical-masem/assets/tutorial/source.json) identifies the expected files and SHA-256 checksums.
+Computational checks support reproducibility; they do not establish the statistical performance of the full procedure in every setting. Correlational paths do not establish causation. The [method guide](skills/hierarchical-masem/references/method.md) explains assumptions and interpretation, including small-study and saturated-model limits.
 
-```sh
-python3 skills/hierarchical-masem/scripts/masem.py benchmark \
-  --project tutorial-check --tutorial-data /path/to/Flow_and_BigFive.xlsx
-```
+## Method, license, and citation
 
-The verified example includes 8 studies, 9 independent samples and **N = 2,377**. The tutorial's `sum(unique(N))` yields 2,208 because two distinct samples both have N = 169. Main path estimates, pooled inputs, four AIC values and the omnibus comparison match the author-code reference within numerical tolerances. Full-V sensitivity, automated model selection, checked likelihood intervals and declared multiplicity families intentionally correct documented source behavior. See the [method and differences](skills/hierarchical-masem/references/method.md).
+Based on the hierarchical two-stage MASEM framework taught by [Dang (2026)](https://doi.org/10.1177/25152459261466637), using `metafor`, `metaSEM`, and `OpenMx`. This repository provides an independent implementation.
 
-## Validation and inference limits
+The implementation, documentation, and synthetic example are **MIT licensed**. Cite the method, relevant R packages, and the software version used; see [CITATION.cff](CITATION.cff) and [third-party notices](THIRD_PARTY_NOTICES.md). Author tutorial materials are available through the article and are not bundled here.
 
-The saved local checks include 23 tutorial numerical/input test groups, 4 CLI/reproduction groups, and 5 public synthetic numerical groups. The seven previously unsuccessful tutorial intervals were recovered and independently audited. The standalone public package is also exercised using only the synthetic example. See the [validation record](validation/README.md) for exact results and commands.
-
-This is computational validation. It does **not** establish unbiasedness, nominal coverage, Type I error or power of the integrated selection/Stage 2/multigroup procedure. Inference remains conditional on the selected Stage 1 model, with particular caution for few studies and variance boundaries. A saturated model's perfect fit does not support its theory; nonsignificance does not establish equivalence; correlation paths and study-level moderators do not identify individual causal effects.
-
-Failed fits or intervals stay visible. The toolkit does not perform literature screening, automatic data extraction or submission administration.
-
-## License, citation and contributions
-
-Our implementation, documentation and synthetic example use the **MIT license**. Author materials and R dependencies have their own rights and licenses; see [third-party notices](THIRD_PARTY_NOTICES.md). Cite Dang (2026), the relevant R packages and the exact software version; [CITATION.cff](CITATION.cff) describes this release. Bug reports should include the version, a minimal synthetic example, relevant diagnostics and package information. Do not post confidential extraction data.
+[Report a bug or suggest an improvement](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/issues). A minimal synthetic example makes a problem easier to reproduce.

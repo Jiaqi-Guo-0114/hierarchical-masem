@@ -6,9 +6,9 @@
 
 Install Python **3.9+** and R **4.6.0** first. The analysis restores the package versions in its lockfile into a separate R library. The current verified platform is macOS; other platforms may need compilers and system libraries to install dependencies.
 
+[Download the full ZIP package](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/latest/download/hierarchical-masem.zip), extract it, and open a terminal in the `hierarchical-masem` folder. Run the following commands there; Git is not required. [Cloning the repository](https://github.com/Jiaqi-Guo-0114/hierarchical-masem) is also an option.
+
 ```sh
-git clone https://github.com/Jiaqi-Guo-0114/hierarchical-masem.git
-cd hierarchical-masem
 python3 skills/hierarchical-masem/scripts/masem.py setup
 python3 skills/hierarchical-masem/scripts/masem.py check
 ```
@@ -29,7 +29,7 @@ Each run creates a new directory and preserves the inputs, configuration, model,
 
 ## Use with Codex
 
-After cloning the repository, install the skill:
+From the extracted package or cloned repository root, install the skill:
 
 ```sh
 mkdir -p ~/.codex/skills

@@ -2,6 +2,8 @@
 
 **Turn correlations from multiple studies into a reproducible analysis of your theoretical path model.**
 
+[**Download the full package (ZIP)**](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/latest/download/hierarchical-masem.zip) · [See an example report](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/latest/download/example-report.html) · [Releases](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/latest)
+
 [简体中文](README.zh-CN.md) · [Get started](docs/getting-started.md) · [Method](skills/hierarchical-masem/references/method.md) · [Validation](validation/README.md)
 
 Hierarchical MASEM helps psychology and social-science researchers synthesize relationships among several variables, fit a path model, and compare that model across study categories. It handles independent samples nested within studies and carries uncertainty from correlation pooling into the path analysis.
@@ -34,7 +36,7 @@ Use it as a **Codex skill** with your data and research question, or run the sam
 
 ## Try it
 
-[Download an example results report](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/download/v0.2.0/example-report.html) to see the output before installing. Open the downloaded HTML in a browser; it uses clearly labeled synthetic data.
+[Download an example results report](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/latest/download/example-report.html) to see the output before installing. Open the downloaded HTML in a browser; it uses clearly labeled synthetic data.
 
 Start with the bundled synthetic example—no research data required. Follow the [quick start](docs/getting-started.md) to prepare the runtime, then use `demo` to run the example and get a browser-ready results page. Python 3.9+ and R 4.6.0 are required; the current verified platform is macOS.
 

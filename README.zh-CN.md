@@ -2,6 +2,8 @@
 
 **把多项研究的相关数据，转化为可复现的理论路径模型分析。**
 
+[**下载完整分析包 ZIP**](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/latest/download/hierarchical-masem.zip) · [先看示例报告](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/latest/download/example-report.html) · [所有版本](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/latest)
+
 [English](README.md) · [开始使用](docs/getting-started.zh-CN.md) · [方法依据](docs/method.zh-CN.md) · [验证记录](validation/README.zh-CN.md)
 
 Hierarchical MASEM 面向心理学与社会科学研究者，帮助你综合多个变量之间的关系、拟合理论路径模型，并比较不同研究类别的路径差异。它处理独立样本嵌套于研究的层级结构，并把合并相关的不确定性传递到路径分析。
@@ -34,7 +36,7 @@ Hierarchical MASEM 面向心理学与社会科学研究者，帮助你综合多�
 
 ## 开始使用
 
-也可以先[下载示例结果报告](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/download/v0.2.0/example-report.html)，直观看到分析交付效果。用浏览器打开下载的 HTML 即可；示例使用明确标注的合成数据。
+也可以先[下载示例结果报告](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/latest/download/example-report.html)，直观看到分析交付效果。用浏览器打开下载的 HTML 即可；示例使用明确标注的合成数据。
 
 先运行仓库自带的合成示例，无需准备真实研究数据。按[入门指南](docs/getting-started.zh-CN.md)准备环境后，使用 `demo` 即可试跑并查看结果页。需要 Python 3.9 及以上、R 4.6.0；当前已验证的平台为 macOS。
 

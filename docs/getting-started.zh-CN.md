@@ -6,9 +6,9 @@
 
 请先安装 Python **3.9 及以上**与 R **4.6.0**。程序会按锁文件，在单独的 R 库中恢复依赖版本。当前验证平台为 macOS；其他平台安装依赖时可能需要编译器和系统库。
 
+[下载完整分析包 ZIP](https://github.com/Jiaqi-Guo-0114/hierarchical-masem/releases/latest/download/hierarchical-masem.zip)，解压后在终端进入 `hierarchical-masem` 文件夹。以下命令均在该文件夹内运行，无需 Git。也可选择[克隆仓库](https://github.com/Jiaqi-Guo-0114/hierarchical-masem)。
+
 ```sh
-git clone https://github.com/Jiaqi-Guo-0114/hierarchical-masem.git
-cd hierarchical-masem
 python3 skills/hierarchical-masem/scripts/masem.py setup
 python3 skills/hierarchical-masem/scripts/masem.py check
 ```
@@ -29,7 +29,7 @@ python3 skills/hierarchical-masem/scripts/masem.py demo --project my-example
 
 ## 在 Codex 中使用
 
-克隆仓库后，安装技能：
+解压分析包或克隆仓库后，在根目录安装技能：
 
 ```sh
 mkdir -p ~/.codex/skills
